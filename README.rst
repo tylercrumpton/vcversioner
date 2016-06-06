@@ -164,6 +164,14 @@ This behavior can be disabled by setting the ``include_dev_version`` parameter
 to ``False``. In that case, the aforementioned untagged commit's version would
 be just ``1.0``.
 
+`PEP 440`_ states that versions created during development cycles should use
+the ``.dev`` suffix instead of ``.post``. This suffix can be used by setting 
+the ``use_dev_not_post`` parameter to ``True``. This suffix references a 
+corresponding future release, so vcversioner will assume that the future
+release is a single version higher than the current commit. For example, if the 
+current commit is one revision past the ``2.0.1`` tag, the computed version
+will be ``2.0.2dev1``.
+
 Since hg requires a commit to make a tag, there's a parameter
 ``decrement_dev_version`` to subtract one from the number of commits after the
 most recent tag. If the VCS used is detected to be hg (i.e. the revision starts
@@ -289,6 +297,7 @@ https://readthedocs.org/dashboard/vcversioner/edit/)
 .. _Elevator pitch: http://en.wikipedia.org/wiki/Elevator_pitch
 .. _pip: https://pypi.python.org/pypi/pip
 .. _PEP 386: http://www.python.org/dev/peps/pep-0386/
+.. _PEP 440: http://www.python.org/dev/peps/pep-0440/#developmental-releases
 .. _Sphinx: http://sphinx-doc.org
 .. _Read the Docs: https://readthedocs.org/
 .. _semantic versioning: http://semver.org/
