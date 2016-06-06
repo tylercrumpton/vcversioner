@@ -6,6 +6,6 @@ python:
   - "3.4"
   - "3.5"
 
-install: "pip install pytest coveralls --use-mirrors"
+install: "pip install pytest coveralls"
 script: "coverage run $(which py.test)"
 after_success: "coveralls"
