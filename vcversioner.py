@@ -25,6 +25,7 @@ import collections
 import os
 import subprocess
 import warnings
+import re
 
 
 Version = collections.namedtuple('Version', 'version commits sha')
@@ -53,7 +54,7 @@ def find_version(include_dev_version=True, root='%(pwd)s',
                  version_file='%(root)s/version.txt', version_module_paths=(),
                  git_args=None, vcs_args=None, decrement_dev_version=None,
                  strip_prefix='v',
-                 Popen=subprocess.Popen, open=open):
+                 Popen=subprocess.Popen, open=open, use_dev_not_post=False):
     """Find an appropriate version number from version control.
 
     It's much more convenient to be able to use your version control system's
@@ -230,7 +231,13 @@ def find_version(include_dev_version=True, root='%(pwd)s',
     if commits == '0' or not include_dev_version:
         version = tag_version
     else:
-        version = '%s.post%s' % (tag_version, commits)
+        if use_dev_not_post:
+            first_part, last_part = re.match(r"^(.*?)(\d+)$", tag_version).groups()
+            incremented_last_part = str(int(last_part) + 1)
+            new_tag_version = first_part + incremented_last_part
+            version = '%s.dev%s' % (new_tag_version, commits)
+        else:
+            version = '%s.post%s' % (tag_version, commits)
 
     for path in version_module_paths:
         with open(path, 'w') as outfile:

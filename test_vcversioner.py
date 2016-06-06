@@ -373,6 +373,35 @@ def test_version_file_substituted_with_no_vcs(tmpdir):
     version = vcversioner.find_version(Popen=empty)
     assert version == ('1.0', '0', 'gbeef')
 
+def test_dev_suffix_with_patch(gitdir):
+    "If no suffix, bump patch number and add dev suffix."
+    version = vcversioner.find_version(decrement_dev_version=False, use_dev_not_post=True, Popen=FakePopen(b'1.0.0-1-gbeef'))
+    assert version == ('1.0.1.dev1', '1', 'gbeef')
+    with gitdir.join('version.txt').open() as infile:
+        assert infile.read() == '1.0.0-1-gbeef'
+
+def test_dev_suffix_with_alpha(gitdir):
+    "If alpha suffix, bump alpha number and add dev suffix."
+    version = vcversioner.find_version(decrement_dev_version=False, use_dev_not_post=True, Popen=FakePopen(b'1.0.0a1-1-gbeef'))
+    assert version == ('1.0.0a2.dev1', '1', 'gbeef')
+    with gitdir.join('version.txt').open() as infile:
+        assert infile.read() == '1.0.0a1-1-gbeef'
+
+def test_dev_suffix_with_long_patch(gitdir):
+    "If no suffix, bump long patch number and add dev suffix."
+    version = vcversioner.find_version(decrement_dev_version=False, use_dev_not_post=True,
+                                       Popen=FakePopen(b'1.0.25-1-gbeef'))
+    assert version == ('1.0.26.dev1', '1', 'gbeef')
+    with gitdir.join('version.txt').open() as infile:
+        assert infile.read() == '1.0.25-1-gbeef'
+
+def test_dev_suffix_with__long_alpha(gitdir):
+    "If long alpha suffix, bump alpha number and add dev suffix."
+    version = vcversioner.find_version(decrement_dev_version=False, use_dev_not_post=True,
+                                       Popen=FakePopen(b'1.0.0a25-1-gbeef'))
+    assert version == ('1.0.0a26.dev1', '1', 'gbeef')
+    with gitdir.join('version.txt').open() as infile:
+        assert infile.read() == '1.0.0a25-1-gbeef'
 
 class Struct(object):
     pass
