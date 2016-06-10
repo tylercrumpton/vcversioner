@@ -74,6 +74,14 @@ def find_version(include_dev_version=True, root='%(pwd)s',
         the version number will be ``1.0.post3``. This behavior can be disabled
         by setting this parameter to ``False``.
 
+    :param use_dev_not_post: PEP 440 states that versions created during
+        development cycles should use the ``.dev`` suffix instead of ``.post.``
+        This suffix can be used by setting this parameter to ``True``. This
+        suffix references a corresponding future release, so vcversioner will
+        assume that the future release is a single version higher than the
+        current commit. For example, if the current commit is one revision past
+        the ``2.0.1`` tag, the computed version will be ``2.0.2dev1``.
+
     :param root: The directory of the repository root. The default value is the
         current working directory, since when running ``setup.py``, this is
         often (but not always) the same as the current working directory.
