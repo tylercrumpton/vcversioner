@@ -1,7 +1,7 @@
 # Copyright (c) Aaron Gallagher <_@habnab.it>
 # See COPYING for details.
 
-import vcversioner
+import tcversioner
 
 # not this again
 from setuptools import setup
@@ -11,13 +11,13 @@ with open('README.rst', 'r') as infile:
     long_description = infile.read()
 
 setup(
-    name='vcversioner',
-    version=vcversioner.find_version().version,
+    name='tcversioner',
+    version=tcversioner.find_version().version,
     description='Use version control tags to discover version numbers',
     long_description=long_description,
-    author='Aaron Gallagher',
-    author_email='_@habnab.it',
-    url='https://github.com/habnabit/vcversioner',
+    author='Tyler Crumpton',
+    author_email='tyler.crumpton@gmail.com',
+    url='https://github.com/tylercrumpton/vcversioner',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -34,8 +34,8 @@ setup(
     ],
     license='ISC',
 
-    py_modules=['vcversioner'],
+    py_modules=['tcversioner'],
     entry_points={
-        'distutils.setup_keywords': ['vcversioner = vcversioner:setup'],
+        'distutils.setup_keywords': ['tcversioner = tcversioner:setup'],
     },
 )
