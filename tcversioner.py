@@ -54,7 +54,8 @@ def find_version(include_dev_version=True, root='%(pwd)s',
                  version_file='%(root)s/version.txt', version_module_paths=(),
                  git_args=None, vcs_args=None, decrement_dev_version=None,
                  strip_prefix='v',
-                 Popen=subprocess.Popen, open=open, use_dev_not_post=False):
+                 Popen=subprocess.Popen, open=open,
+                 use_dev_not_post=False, no_subst_vcs_args=False):
     """Find an appropriate version number from version control.
 
     It's much more convenient to be able to use your version control system's
@@ -117,6 +118,14 @@ def find_version(include_dev_version=True, root='%(pwd)s',
         version number tags. By default this is ``'v'``, but could be
         ``'debian/'`` for compatibility with ``git-dch``.
 
+    :param use_dev_not_post: If ``True``, create ``dev`` versions instead
+        of ``post`` versions.
+
+    :param no_subst_vcs_args: If ``True``, do not call substitute to fix
+        up paths in the vcs_args. This may be useful for cross-platform
+        development where ``/`` is used as a namespace separator in tag
+        names.
+
     :param Popen: Defaults to ``subprocess.Popen``. This is for testing.
 
     :param open: Defaults to ``open``. This is for testing.
@@ -173,7 +182,10 @@ def find_version(include_dev_version=True, root='%(pwd)s',
     vcs_output = []
 
     if vcs_args is not None:
-        vcs_args = [substitute(arg) for arg in vcs_args]
+        if no_subst_vcs_args:
+            vcs_args = [arg for arg in vcs_args]
+        else:
+            vcs_args = [substitute(arg) for arg in vcs_args]
 
         # try to pull the version from some VCS, or (perhaps) fall back on a
         # previously-saved version.
