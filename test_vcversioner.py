@@ -147,6 +147,13 @@ def test_custom_vcs_args_substitutions(gitdir):
         vcversioner.find_version(Popen=popen, vcs_args=('foo', 'bar', '%(pwd)s', '%(root)s'))
     assert popen.args[0] == ['foo', 'bar', gitdir.strpath, gitdir.strpath]
 
+def test_custom_vcs_args_no_substitutions(gitdir):
+    "The command arguments would have some substitutions performed, but we explicitly skipped them."
+    popen = RaisingFakePopen()
+    with pytest.raises(SystemExit):
+        vcversioner.find_version(Popen=popen, vcs_args=('foo', 'bar', 'baz/quux', 'frob/grok'), no_subst_vcs_args=True)
+    assert popen.args[0] == ['foo', 'bar', 'baz/quux', 'frob/grok']
+
 def test_custom_vcs_args_substitutions_with_different_root(tmpdir):
     "Specifying a different root will cause that root to be substituted."
     tmpdir.chdir()
